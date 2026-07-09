@@ -1,0 +1,78 @@
+{
+  "categories": [
+    {
+      "key": "mercado",
+      "label": "Mercado/Supermercado",
+      "priority": 1,
+      "keywords": ["supermercado", "mercado", "atacadao", "atacadão", "assai", "assaí", "carrefour", "pao de acucar", "extra", "hortifruti", "sacolao", "sacolão"]
+    },
+    {
+      "key": "farmacia",
+      "label": "Farmácia/Saúde",
+      "priority": 2,
+      "keywords": ["farmacia", "farmácia", "drogaria", "droga raia", "drogasil", "pacheco", "clinica", "clínica", "laboratorio", "laboratório", "hospital", "consulta", "odonto"]
+    },
+    {
+      "key": "posto",
+      "label": "Posto/Combustível",
+      "priority": 3,
+      "keywords": ["posto", "combustivel", "combustível", "ipiranga", "shell", "petrobras", "br mania", "ale combustiveis", "auto posto"]
+    },
+    {
+      "key": "alimentacao",
+      "label": "Alimentação/Restaurante",
+      "priority": 4,
+      "keywords": ["restaurante", "lanchonete", "ifood", "rappi", "padaria", "pizzaria", "cafeteria", "hamburgueria", "churrascaria", "food"]
+    },
+    {
+      "key": "transporte",
+      "label": "Transporte",
+      "priority": 5,
+      "keywords": ["uber", "99app", "99*", "estacionamento", "pedagio", "pedágio", "metro", "metrô", "onibus", "ônibus", "taxi", "táxi"]
+    },
+    {
+      "key": "contas",
+      "label": "Contas/Serviços",
+      "priority": 6,
+      "keywords": ["energia", "eletropaulo", "enel", "vivo", "claro", "tim", "netflix", "spotify", "condominio", "condomínio", "internet", "agua", "água", "sabesp", "amazon prime", "youtube premium", "seguro"]
+    },
+    {
+      "key": "vestuario",
+      "label": "Vestuário",
+      "priority": 7,
+      "keywords": ["renner", "riachuelo", "c&a", "cea ", "zara", "calcados", "calçados", "modas"]
+    },
+    {
+      "key": "compras_online",
+      "label": "Compras online",
+      "priority": 8,
+      "keywords": ["mercado livre", "mercadolivre", "amazon", "shopee", "aliexpress", "magazine luiza", "magalu", "shein"]
+    },
+    {
+      "key": "encargos",
+      "label": "Encargos/Juros/IOF",
+      "priority": 9,
+      "keywords": ["iof", "juros", "multa", "anuidade", "encargo", "tarifa"]
+    },
+    {
+      "key": "lazer",
+      "label": "Lazer/Entretenimento",
+      "priority": 10,
+      "keywords": ["cinema", "ingresso", "steam", "playstation", "xbox", "show", "teatro", "parque", "viagem", "hotel", "airbnb", "bar ", "balada"]
+    },
+    {
+      "key": "pagamentos",
+      "label": "Pagamentos e Créditos",
+      "priority": 98,
+      "keywords": ["pagamento efetuado", "pagamento recebido", "estorno", "credito de", "crédito de", "pagto"],
+      "excluded_from_spend_total": true
+    },
+    {
+      "key": "outros",
+      "label": "Não identificado/Outros",
+      "priority": 99,
+      "keywords": [],
+      "is_default": true
+    }
+  ]
+}
