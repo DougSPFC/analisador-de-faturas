@@ -9,11 +9,22 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
+# Data numérica (21/06, 21/06/2026) ou por extenso abreviado (21 JUN) — os dois formatos
+# aparecem em faturas reais (bancos com layout tabular vs. layout "timeline" tipo Nubank).
+DATE_PATTERN = r"(?:\d{2}/\d{2}(?:/\d{2,4})?|\d{2}\s+(?:JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ))"
+
+# Sinal negativo pode ser o hífen comum OU o sinal matemático "−" (U+2212) que alguns
+# bancos usam para estornos/pagamentos, aparecendo antes OU depois do valor.
 GENERIC_LINE_RE = re.compile(
-    r"^(?P<date>\d{2}/\d{2}(?:/\d{2,4})?)\s+"
+    r"^(?:\d+\s+)?(?P<date>" + DATE_PATTERN + r")\s+"
     r"(?P<desc>.+?)\s+"
-    r"(?P<value>-?\s?R?\$?\s?\d{1,3}(?:\.\d{3})*,\d{2}\s?-?)\s*$"
+    r"(?P<value>[-−]?\s?R?\$?\s?\d{1,3}(?:\.\d{3})*,\d{2}\s?[-−]?)\s*$",
+    re.IGNORECASE,
 )
+
+# Sufixo de cartão mascarado (ex: "•••• 0985", "**** 1234") que aparece entre a data e a
+# descrição em algumas faturas — removido antes do match para não poluir a descrição.
+CARD_SUFFIX_RE = re.compile(r"[•*]{3,}\s*\d{3,4}\b")
 
 # Linhas que nunca são transação, mesmo que casem com a regex por acidente.
 NOISE_SUBSTRINGS = [

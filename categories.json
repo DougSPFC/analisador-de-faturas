@@ -1,6 +1,13 @@
 {
   "categories": [
     {
+      "key": "pagamentos",
+      "label": "Pagamentos e Créditos",
+      "priority": 0,
+      "keywords": ["pagamento", "estorno", "credito de", "crédito de", "pagto", "saldo restante"],
+      "excluded_from_spend_total": true
+    },
+    {
       "key": "mercado",
       "label": "Mercado/Supermercado",
       "priority": 1,
@@ -59,13 +66,6 @@
       "label": "Lazer/Entretenimento",
       "priority": 10,
       "keywords": ["cinema", "ingresso", "steam", "playstation", "xbox", "show", "teatro", "parque", "viagem", "hotel", "airbnb", "bar ", "balada"]
-    },
-    {
-      "key": "pagamentos",
-      "label": "Pagamentos e Créditos",
-      "priority": 98,
-      "keywords": ["pagamento efetuado", "pagamento recebido", "estorno", "credito de", "crédito de", "pagto"],
-      "excluded_from_spend_total": true
     },
     {
       "key": "outros",

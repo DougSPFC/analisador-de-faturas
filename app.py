@@ -15,9 +15,18 @@ from categorizer import categorize_dataframe, category_labels, load_categories
 from export import to_csv_bytes, to_excel_bytes
 from pdf_parser import parse_pdf
 
-BAR_COLOR = "#2a78d6"
-MUTED_TEXT = "#52514e"
-GRIDLINE = "#e1e0d9"
+THEME_COLORS = {
+    "light": {"bar": "#2a78d6", "text": "#52514e", "grid": "#e1e0d9", "surface": "#fcfcfb"},
+    "dark": {"bar": "#3987e5", "text": "#c3c2b7", "grid": "#2c2c2a", "surface": "#1a1a19"},
+}
+
+
+def _theme_colors() -> dict:
+    try:
+        theme_type = st.context.theme.type
+    except Exception:
+        theme_type = "light"
+    return THEME_COLORS.get(theme_type, THEME_COLORS["light"])
 
 st.set_page_config(page_title="Analisador de Faturas", layout="wide")
 st.session_state.setdefault("invoices", {})
@@ -115,24 +124,26 @@ spend_totals = totals[~totals["excluded_from_spend_total"]].reset_index(drop=Tru
 other_totals = totals[totals["excluded_from_spend_total"]].reset_index(drop=True)
 
 if not spend_totals.empty:
+    colors = _theme_colors()
     fig = go.Figure(
         go.Bar(
             x=spend_totals["total"],
             y=spend_totals["label"],
             orientation="h",
-            marker_color=BAR_COLOR,
+            marker_color=colors["bar"],
             text=[f"R$ {v:,.2f}" for v in spend_totals["total"]],
             textposition="outside",
+            textfont=dict(color=colors["text"]),
             hovertemplate="%{y}<br>R$ %{x:,.2f}<extra></extra>",
         )
     )
     fig.update_layout(
         title="Gasto por categoria (essenciais primeiro)",
-        yaxis=dict(autorange="reversed", title=None),
-        xaxis=dict(title="R$", gridcolor=GRIDLINE, zeroline=False),
-        plot_bgcolor="#fcfcfb",
-        paper_bgcolor="#fcfcfb",
-        font_color=MUTED_TEXT,
+        yaxis=dict(autorange="reversed", title=None, color=colors["text"]),
+        xaxis=dict(title="R$", gridcolor=colors["grid"], zeroline=False, color=colors["text"]),
+        plot_bgcolor=colors["surface"],
+        paper_bgcolor=colors["surface"],
+        font_color=colors["text"],
         margin=dict(l=10, r=60, t=50, b=10),
         height=90 + 40 * len(spend_totals),
     )

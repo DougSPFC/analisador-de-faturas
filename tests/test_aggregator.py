@@ -22,10 +22,10 @@ def test_totals_by_category_orders_by_priority_and_excludes_empty_categories():
     totals = totals_by_category(df, rules)
 
     assert list(totals["label"]) == [
+        "Pagamentos e Créditos",
         "Mercado/Supermercado",
         "Farmácia/Saúde",
         "Lazer/Entretenimento",
-        "Pagamentos e Créditos",
     ]
     assert totals.loc[totals["label"] == "Mercado/Supermercado", "total"].iloc[0] == 100.0
 
