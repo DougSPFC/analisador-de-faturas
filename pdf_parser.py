@@ -188,23 +188,49 @@ def _count_matches(lines: list[str]) -> int:
     return count
 
 
+# Linhas de transação de verdade raramente passam disso; uma linha mais longa
+# que já "bate" com a regex é sinal de duas transações de colunas diferentes
+# coladas numa só pelo extract_text() (o bug que motivou os fallbacks abaixo).
+MAX_RELIABLE_LINE_LENGTH = 85
+
+
+def _naive_lines_reliable(page_lines: list[str]) -> bool:
+    """True quando a extração simples já tem transações suficientes e nenhuma
+    parece contaminada por texto de outra coluna — nesse caso não vale a pena
+    gastar CPU/memória tentando os fallbacks (extract_tables/extract_words),
+    que são bem mais caros que só regexar as linhas já extraídas."""
+    count = 0
+    for line in page_lines:
+        cleaned = clean_line(line.strip())
+        if not cleaned or is_noise_line(cleaned):
+            continue
+        if GENERIC_LINE_RE.match(cleaned):
+            if len(cleaned) > MAX_RELIABLE_LINE_LENGTH:
+                return False
+            count += 1
+    return count >= 3
+
+
 def _best_lines_for_page(page, page_lines: list[str]) -> list[str]:
     """Escolhe, entre a extração simples de texto e dois fallbacks (tabela e duas
     colunas), a que reconhece mais linhas de transação — necessário porque faturas
     diferentes exigem estratégias de extração diferentes.
 
-    Sempre comparamos as três estratégias (mesmo quando a extração simples já
-    "acerta" algumas linhas): em layouts de duas colunas, o texto simples pode
-    colar linhas de colunas diferentes numa só — o que ainda conta como uma
-    correspondência (só que com dados errados) e não pode vencer por padrão.
+    Só tentamos os fallbacks (bem mais caros: extract_tables/extract_words por
+    página) quando a extração simples não parece confiável — poucas transações
+    reconhecidas, ou alguma linha longa demais sugerindo colunas coladas. Página
+    após página, a maioria das faturas é de coluna única e a extração simples já
+    basta, então este atalho evita gastar memória/CPU à toa nelas.
 
     Um fallback só é aceito se reconhecer pelo menos 3 transações: páginas sem
     nenhuma transação de verdade (resumo, propaganda) às vezes geram 1 ou 2
     "transações" falsas ao reagrupar palavras por posição, e não queremos que
     esse ruído vença uma extração original correta (mas com poucas transações).
     """
-    best_lines, best_count = page_lines, _count_matches(page_lines)
+    if _naive_lines_reliable(page_lines):
+        return page_lines
 
+    best_lines, best_count = page_lines, _count_matches(page_lines)
     MIN_ACCEPT = 3
     for candidate in (_extract_lines_from_tables(page), _extract_lines_two_column(page)):
         if not candidate:
