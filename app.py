@@ -149,30 +149,51 @@ if not spend_totals.empty:
     )
     st.plotly_chart(fig, use_container_width=True)
 
-    st.dataframe(
-        spend_totals[["label", "total", "pct", "n_transacoes"]].rename(
-            columns={
-                "label": "Categoria",
-                "total": "Total (R$)",
-                "pct": "% do total",
-                "n_transacoes": "Transações",
-            }
-        ),
-        hide_index=True,
-        use_container_width=True,
-    )
+    detail_column_config = {
+        "date": st.column_config.DateColumn("Data", format="DD/MM/YYYY"),
+        "description": st.column_config.TextColumn("Descrição", width="large"),
+        "amount": st.column_config.NumberColumn("Valor (R$)", format="R$ %.2f"),
+        "fatura": st.column_config.TextColumn("Fatura"),
+    }
+
+    st.caption("Clique numa categoria para ver as transações que compõem o total")
+    for _, row in spend_totals.iterrows():
+        cat_label = row["label"]
+        cat_df = combined_df[combined_df["category"] == cat_label].sort_values(
+            "amount", ascending=False
+        )
+        with st.expander(f"{cat_label} — R$ {row['total']:,.2f} ({row['n_transacoes']} transações)"):
+            if cat_label == "Não identificado/Outros":
+                st.caption(
+                    "Nenhuma palavra-chave bateu com essas descrições. Você pode corrigir a "
+                    "categoria diretamente na tabela da fatura (acima) ou adicionar uma "
+                    "palavra-chave em categories.json para que apareçam classificadas nas "
+                    "próximas faturas."
+                )
+            st.dataframe(
+                cat_df[["date", "description", "amount", "fatura"]],
+                hide_index=True,
+                use_container_width=True,
+                column_config=detail_column_config,
+            )
 else:
     st.write("Nenhuma transação classificada como gasto ainda.")
 
 if not other_totals.empty:
-    with st.expander("Pagamentos e créditos (não entram no total de gastos)"):
-        st.dataframe(
-            other_totals[["label", "total", "n_transacoes"]].rename(
-                columns={"label": "Categoria", "total": "Total (R$)", "n_transacoes": "Transações"}
-            ),
-            hide_index=True,
-            use_container_width=True,
+    for _, row in other_totals.iterrows():
+        cat_label = row["label"]
+        cat_df = combined_df[combined_df["category"] == cat_label].sort_values(
+            "amount", ascending=False
         )
+        with st.expander(
+            f"{cat_label} — R$ {row['total']:,.2f} ({row['n_transacoes']} — não entra no total de gastos)"
+        ):
+            st.dataframe(
+                cat_df[["date", "description", "amount", "fatura"]],
+                hide_index=True,
+                use_container_width=True,
+                column_config=detail_column_config,
+            )
 
 st.divider()
 st.subheader("Exportar")

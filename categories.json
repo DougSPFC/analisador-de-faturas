@@ -11,13 +11,13 @@
       "key": "mercado",
       "label": "Mercado/Supermercado",
       "priority": 1,
-      "keywords": ["supermercado", "mercado", "atacadao", "atacadão", "assai", "assaí", "carrefour", "pao de acucar", "extra", "hortifruti", "sacolao", "sacolão", "market4u", "condor", "super center"]
+      "keywords": ["supermercado", "mercado", "atacadao", "atacadão", "assai", "assaí", "carrefour", "pao de acucar", "extra", "hortifruti", "sacolao", "sacolão", "market4u", "condor", "super center", "jacomar", "acougue", "açougue"]
     },
     {
       "key": "farmacia",
       "label": "Farmácia/Saúde",
       "priority": 2,
-      "keywords": ["farmacia", "farmácia", "drogaria", "droga raia", "drogasil", "pacheco", "clinica", "clínica", "laboratorio", "laboratório", "hospital", "consulta", "odonto", "farma"]
+      "keywords": ["farmacia", "farmácia", "drogaria", "droga raia", "drogasil", "pacheco", "clinica", "clínica", "laboratorio", "laboratório", "hospital", "consulta", "odonto", "farma", "cosmetico", "cosmético", "aneethun"]
     },
     {
       "key": "posto",
@@ -29,7 +29,7 @@
       "key": "alimentacao",
       "label": "Alimentação/Restaurante",
       "priority": 4,
-      "keywords": ["restaurante", "lanchonete", "ifood", "rappi", "padaria", "pizzaria", "pizza", "cafeteria", "hamburgueria", "churrascaria", "food", "paes", "pães", "doces", "gula"]
+      "keywords": ["restaurante", "lanchonete", "lanchone", "ifood", "rappi", "padaria", "pizzaria", "pizza", "cafeteria", "hamburgueria", "churrascaria", "food", "paes", "pães", "doces", "gula"]
     },
     {
       "key": "transporte",
@@ -38,34 +38,40 @@
       "keywords": ["uber", "99app", "99*", "99 ride", "estacionamento", "pedagio", "pedágio", "metro", "metrô", "onibus", "ônibus", "taxi", "táxi"]
     },
     {
+      "key": "assinaturas",
+      "label": "Assinaturas",
+      "priority": 6,
+      "keywords": ["netflix", "spotify", "amazon prime", "youtube", "google one", "canva", "wellhub", "gympass", "openai", "chatgpt", "vindi", "nucel", "hbo", "disney", "paramount", "deezer", "apple music", "icloud", "office 365", "microsoft 365"]
+    },
+    {
       "key": "contas",
       "label": "Contas/Serviços",
-      "priority": 6,
-      "keywords": ["energia", "eletropaulo", "enel", "vivo", "claro", "tim", "netflix", "spotify", "condominio", "condomínio", "internet", "agua", "água", "sabesp", "amazon prime", "youtube premium", "youtubepremium", "google one", "canva", "seguro"]
+      "priority": 7,
+      "keywords": ["energia", "eletropaulo", "enel", "vivo", "claro", "tim", "condominio", "condomínio", "internet", "agua", "água", "sabesp", "seguro"]
     },
     {
       "key": "vestuario",
       "label": "Vestuário",
-      "priority": 7,
-      "keywords": ["renner", "riachuelo", "c&a", "cea ", "zara", "calcados", "calçados", "modas", "netshoes"]
+      "priority": 8,
+      "keywords": ["renner", "riachuelo", "c&a", "cea ", "zara", "calcados", "calçados", "modas", "netshoes", "vestuario", "vestuário"]
     },
     {
       "key": "compras_online",
       "label": "Compras online",
-      "priority": 8,
+      "priority": 9,
       "keywords": ["mercado livre", "mercadolivre", "amazon", "shopee", "aliexpress", "magazine luiza", "magalu", "shein"]
     },
     {
       "key": "encargos",
       "label": "Encargos/Juros/IOF",
-      "priority": 9,
+      "priority": 10,
       "keywords": ["iof", "juros", "multa", "anuidade", "encargo", "tarifa"]
     },
     {
       "key": "lazer",
       "label": "Lazer/Entretenimento",
-      "priority": 10,
-      "keywords": ["cinema", "ingresso", "steam", "playstation", "xbox", "show", "teatro", "parque", "viagem", "hotel", "airbnb", "bar ", "balada", "wellhub"]
+      "priority": 11,
+      "keywords": ["cinema", "ingresso", "steam", "playstation", "xbox", "show", "teatro", "parque", "viagem", "hotel", "airbnb", "bar ", "balada", "vinho", "vinhos"]
     },
     {
       "key": "outros",
