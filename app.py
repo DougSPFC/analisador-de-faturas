@@ -14,6 +14,7 @@ from aggregator import combine_invoices, invoice_to_dataframe, summary_metrics, 
 from categorizer import categorize_dataframe, category_labels, load_categories, normalize_text
 from export import to_csv_bytes, to_excel_bytes
 from pdf_parser import parse_pdf
+from theme import GLOBAL_CSS, category_badge, category_color, stat_card
 
 THEME_COLORS = {
     "light": {"bar": "#2a78d6", "text": "#52514e", "grid": "#e1e0d9", "surface": "#fcfcfb"},
@@ -29,12 +30,26 @@ def _theme_colors() -> dict:
     return THEME_COLORS.get(theme_type, THEME_COLORS["light"])
 
 st.set_page_config(page_title="Analisador de Faturas", layout="wide")
+st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 st.session_state.setdefault("invoices", {})
 
 rules = load_categories()
 category_options = category_labels(rules)
 
-st.title("Analisador de Faturas")
+st.markdown(
+    """
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:4px;">
+        <div style="
+            width:52px; height:52px; border-radius:14px; flex-shrink:0;
+            background: linear-gradient(135deg, #7C6FEA, #5B4FD1);
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.6rem;
+        ">🧾</div>
+        <div style="font-size:2.3rem; font-weight:800; color:#F2F3F7; line-height:1.1;">Analisador de Faturas</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 st.write(
     "Envie o PDF da sua fatura de cartão de crédito para separar os gastos por "
     "categoria (mercado, farmácia, posto, lazer etc.) e ver o total combinado, "
@@ -114,10 +129,14 @@ combined_df = combine_invoices(st.session_state.invoices)
 metrics = summary_metrics(combined_df, rules, n_invoices=len(st.session_state.invoices))
 
 col1, col2, col3, col4 = st.columns(4)
-col1.metric("Total gasto", f"R$ {metrics['total_gasto']:,.2f}")
-col2.metric("Essenciais (mercado + farmácia + posto)", f"R$ {metrics['total_essencial']:,.2f}")
-col3.metric("Transações", metrics["n_transacoes"])
-col4.metric("Faturas incluídas", metrics["n_faturas"])
+col1.markdown(stat_card("Total gasto", f"R$ {metrics['total_gasto']:,.2f}", "#7C6FEA"), unsafe_allow_html=True)
+col2.markdown(
+    stat_card("Essenciais", f"R$ {metrics['total_essencial']:,.2f}", "#F4A52A", "mercado + farmácia + posto"),
+    unsafe_allow_html=True,
+)
+col3.markdown(stat_card("Transações", str(metrics["n_transacoes"]), "#2dd4bf"), unsafe_allow_html=True)
+col4.markdown(stat_card("Faturas incluídas", str(metrics["n_faturas"]), "#34D399"), unsafe_allow_html=True)
+st.markdown("<div style='height:0.6rem'></div>", unsafe_allow_html=True)
 
 detail_column_config = {
     "date": st.column_config.DateColumn("Data", format="DD/MM/YYYY"),
@@ -141,8 +160,16 @@ if search_term.strip():
     if matches.empty:
         st.write(f'Nenhuma transação encontrada para "{search_term}".')
     else:
-        st.metric(f'Total para "{search_term}"', f"R$ {matches['amount'].sum():,.2f}")
-        st.caption(f"{len(matches)} transação(ões) encontrada(s), em qualquer categoria ou fatura")
+        st.markdown(
+            stat_card(
+                f'Total para "{search_term}"',
+                f"R$ {matches['amount'].sum():,.2f}",
+                "#2dd4bf",
+                f"{len(matches)} transação(ões) encontrada(s), em qualquer categoria ou fatura",
+            ),
+            unsafe_allow_html=True,
+        )
+        st.markdown("<div style='height:0.6rem'></div>", unsafe_allow_html=True)
         st.dataframe(
             matches[["date", "description", "amount", "category", "fatura"]],
             hide_index=True,
@@ -158,12 +185,13 @@ other_totals = totals[totals["excluded_from_spend_total"]].reset_index(drop=True
 
 if not spend_totals.empty:
     colors = _theme_colors()
+    bar_colors = [category_color(label) for label in spend_totals["label"]]
     fig = go.Figure(
         go.Bar(
             x=spend_totals["total"],
             y=spend_totals["label"],
             orientation="h",
-            marker_color=colors["bar"],
+            marker_color=bar_colors,
             text=[f"R$ {v:,.2f}" for v in spend_totals["total"]],
             textposition="outside",
             textfont=dict(color=colors["text"]),
@@ -188,7 +216,9 @@ if not spend_totals.empty:
         cat_df = combined_df[combined_df["category"] == cat_label].sort_values(
             "amount", ascending=False
         )
-        with st.expander(f"{cat_label} — R$ {row['total']:,.2f} ({row['n_transacoes']} transações)"):
+        with st.expander(
+            f"{category_badge(cat_label)} {cat_label} — R$ {row['total']:,.2f} ({row['n_transacoes']} transações)"
+        ):
             if cat_label == "Não identificado/Outros":
                 st.caption(
                     "Nenhuma palavra-chave bateu com essas descrições. Você pode corrigir a "
@@ -212,7 +242,8 @@ if not other_totals.empty:
             "amount", ascending=False
         )
         with st.expander(
-            f"{cat_label} — R$ {row['total']:,.2f} ({row['n_transacoes']} — não entra no total de gastos)"
+            f"{category_badge(cat_label)} {cat_label} — R$ {row['total']:,.2f} "
+            f"({row['n_transacoes']} — não entra no total de gastos)"
         ):
             st.dataframe(
                 cat_df[["date", "description", "amount", "fatura"]],
