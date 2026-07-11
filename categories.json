@@ -11,13 +11,13 @@
       "key": "mercado",
       "label": "Mercado/Supermercado",
       "priority": 1,
-      "keywords": ["supermercado", "mercado", "atacadao", "atacadão", "assai", "assaí", "carrefour", "pao de acucar", "extra", "hortifruti", "sacolao", "sacolão", "market4u", "condor", "super center", "jacomar", "acougue", "açougue"]
+      "keywords": ["supermercado", "mercado", "atacadao", "atacadão", "assai", "assaí", "carrefour", "pao de acucar", "extra", "hortifruti", "sacolao", "sacolão", "market4u", "condor", "super center", "jacomar", "acougue", "açougue", "mercearia", "superm "]
     },
     {
       "key": "farmacia",
       "label": "Farmácia/Saúde",
       "priority": 2,
-      "keywords": ["farmacia", "farmácia", "drogaria", "droga raia", "drogasil", "pacheco", "clinica", "clínica", "laboratorio", "laboratório", "hospital", "consulta", "odonto", "farma", "cosmetico", "cosmético", "aneethun"]
+      "keywords": ["farmacia", "farmácia", "drogaria", "droga raia", "drogasil", "pacheco", "clinica", "clínica", "laboratorio", "laboratório", "hospital", "consulta", "odonto", "farma", "cosmetico", "cosmético", "aneethun", "panvel"]
     },
     {
       "key": "posto",
@@ -29,7 +29,7 @@
       "key": "alimentacao",
       "label": "Alimentação/Restaurante",
       "priority": 4,
-      "keywords": ["restaurante", "lanchonete", "lanchone", "ifood", "rappi", "padaria", "pizzaria", "pizza", "cafeteria", "hamburgueria", "churrascaria", "food", "paes", "pães", "doces", "gula"]
+      "keywords": ["restaurante", "lanchonete", "lanchone", "ifood", "rappi", "padaria", "pizzaria", "pizza", "cafeteria", "hamburgueria", "churrascaria", "food", "paes", "pães", "doces", "gula", "burger king", "pao de queijo", "pastel", "grill"]
     },
     {
       "key": "transporte",
@@ -41,7 +41,7 @@
       "key": "assinaturas",
       "label": "Assinaturas",
       "priority": 6,
-      "keywords": ["netflix", "spotify", "amazon prime", "youtube", "google one", "canva", "wellhub", "gympass", "openai", "chatgpt", "vindi", "nucel", "hbo", "disney", "paramount", "deezer", "apple music", "icloud", "office 365", "microsoft 365"]
+      "keywords": ["netflix", "spotify", "amazon prime", "youtube", "google one", "google", "canva", "wellhub", "gympass", "openai", "chatgpt", "anthropic", "claude", "vindi", "nucel", "hbo", "disney", "paramount", "deezer", "apple music", "icloud", "office 365", "microsoft 365"]
     },
     {
       "key": "contas",
@@ -71,7 +71,7 @@
       "key": "lazer",
       "label": "Lazer/Entretenimento",
       "priority": 11,
-      "keywords": ["cinema", "ingresso", "steam", "playstation", "xbox", "show", "teatro", "parque", "viagem", "hotel", "airbnb", "bar ", "balada", "vinho", "vinhos"]
+      "keywords": ["cinema", "ingresso", "steam", "playstation", "xbox", "show", "teatro", "parque", "viagem", "hotel", "airbnb", "bar ", "balada", "vinho", "vinhos", "loteria", "loterias"]
     },
     {
       "key": "outros",

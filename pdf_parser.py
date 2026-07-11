@@ -154,7 +154,7 @@ def _find_column_gutter(words: list[dict], page_width: float) -> float | None:
         gap = b - a
         if gap > best_gap:
             best_gap, best_mid = gap, (a + b) / 2
-    return best_mid if best_gap >= 15 else None
+    return best_mid if best_gap >= 10 else None
 
 
 def _extract_lines_two_column(page) -> list[str]:

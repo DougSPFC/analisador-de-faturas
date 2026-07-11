@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 import unicodedata
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -10,11 +11,17 @@ DEFAULT_CATEGORIES_PATH = Path(__file__).parent / "categories.json"
 
 
 @dataclass
+class Keyword:
+    pattern: re.Pattern
+    length: int  # tamanho do texto "núcleo", usado para decidir a keyword mais específica
+
+
+@dataclass
 class CategoryRule:
     key: str
     label: str
     priority: int
-    keywords: list[str] = field(default_factory=list)
+    keywords: list[Keyword] = field(default_factory=list)
     excluded_from_spend_total: bool = False
     is_default: bool = False
 
@@ -27,6 +34,27 @@ def normalize_text(text: str) -> str:
     return " ".join(text.split())
 
 
+def _compile_keyword(raw: str) -> Keyword | None:
+    """Compila uma keyword do categories.json num regex.
+
+    Um espaço no início/fim da keyword (ex: `"bar "`) marca que aquele lado deve ser
+    uma borda de palavra — sem isso, uma keyword curta como "bar" ou "cea" acaba
+    batendo dentro de qualquer palavra que a contenha por coincidência (ex: "cea"
+    dentro de "mercearia"). Sem espaço nas bordas, a keyword casa como substring livre
+    em qualquer posição (ex: "farma" dentro de "Gessifarma").
+    """
+    if not raw:
+        return None
+    left_boundary = raw.startswith(" ")
+    right_boundary = raw.endswith(" ")
+    core = normalize_text(raw)
+    if not core:
+        return None
+    left = r"(?<![a-z0-9])" if left_boundary else ""
+    right = r"(?![a-z0-9])" if right_boundary else ""
+    return Keyword(pattern=re.compile(left + re.escape(core) + right), length=len(core))
+
+
 def load_categories(path: Path | str = DEFAULT_CATEGORIES_PATH) -> list[CategoryRule]:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     rules = [
@@ -34,7 +62,7 @@ def load_categories(path: Path | str = DEFAULT_CATEGORIES_PATH) -> list[Category
             key=c["key"],
             label=c["label"],
             priority=c["priority"],
-            keywords=[normalize_text(k) for k in c.get("keywords", [])],
+            keywords=[kw for k in c.get("keywords", []) if (kw := _compile_keyword(k)) is not None],
             excluded_from_spend_total=c.get("excluded_from_spend_total", False),
             is_default=c.get("is_default", False),
         )
@@ -68,7 +96,7 @@ def categorize(description: str, rules: list[CategoryRule]) -> str:
         if rule.is_default:
             default_label = rule.label
             continue
-        match_lengths = [len(keyword) for keyword in rule.keywords if keyword and keyword in normalized]
+        match_lengths = [kw.length for kw in rule.keywords if kw.pattern.search(normalized)]
         if not match_lengths:
             continue
         longest_match = max(match_lengths)
