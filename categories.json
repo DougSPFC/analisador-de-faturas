@@ -4,20 +4,20 @@
       "key": "pagamentos",
       "label": "Pagamentos e Créditos",
       "priority": 0,
-      "keywords": ["pagamento", "estorno", "credito de", "crédito de", "pagto", "saldo restante"],
+      "keywords": ["pagamento", "pagto", "saldo restante"],
       "excluded_from_spend_total": true
     },
     {
       "key": "mercado",
       "label": "Mercado/Supermercado",
       "priority": 1,
-      "keywords": ["supermercado", "mercado", "atacadao", "atacadão", "assai", "assaí", "carrefour", "pao de acucar", "extra", "hortifruti", "sacolao", "sacolão"]
+      "keywords": ["supermercado", "mercado", "atacadao", "atacadão", "assai", "assaí", "carrefour", "pao de acucar", "extra", "hortifruti", "sacolao", "sacolão", "market4u", "condor", "super center"]
     },
     {
       "key": "farmacia",
       "label": "Farmácia/Saúde",
       "priority": 2,
-      "keywords": ["farmacia", "farmácia", "drogaria", "droga raia", "drogasil", "pacheco", "clinica", "clínica", "laboratorio", "laboratório", "hospital", "consulta", "odonto"]
+      "keywords": ["farmacia", "farmácia", "drogaria", "droga raia", "drogasil", "pacheco", "clinica", "clínica", "laboratorio", "laboratório", "hospital", "consulta", "odonto", "farma"]
     },
     {
       "key": "posto",
@@ -29,25 +29,25 @@
       "key": "alimentacao",
       "label": "Alimentação/Restaurante",
       "priority": 4,
-      "keywords": ["restaurante", "lanchonete", "ifood", "rappi", "padaria", "pizzaria", "cafeteria", "hamburgueria", "churrascaria", "food"]
+      "keywords": ["restaurante", "lanchonete", "ifood", "rappi", "padaria", "pizzaria", "pizza", "cafeteria", "hamburgueria", "churrascaria", "food", "paes", "pães", "doces", "gula"]
     },
     {
       "key": "transporte",
       "label": "Transporte",
       "priority": 5,
-      "keywords": ["uber", "99app", "99*", "estacionamento", "pedagio", "pedágio", "metro", "metrô", "onibus", "ônibus", "taxi", "táxi"]
+      "keywords": ["uber", "99app", "99*", "99 ride", "estacionamento", "pedagio", "pedágio", "metro", "metrô", "onibus", "ônibus", "taxi", "táxi"]
     },
     {
       "key": "contas",
       "label": "Contas/Serviços",
       "priority": 6,
-      "keywords": ["energia", "eletropaulo", "enel", "vivo", "claro", "tim", "netflix", "spotify", "condominio", "condomínio", "internet", "agua", "água", "sabesp", "amazon prime", "youtube premium", "seguro"]
+      "keywords": ["energia", "eletropaulo", "enel", "vivo", "claro", "tim", "netflix", "spotify", "condominio", "condomínio", "internet", "agua", "água", "sabesp", "amazon prime", "youtube premium", "youtubepremium", "google one", "canva", "seguro"]
     },
     {
       "key": "vestuario",
       "label": "Vestuário",
       "priority": 7,
-      "keywords": ["renner", "riachuelo", "c&a", "cea ", "zara", "calcados", "calçados", "modas"]
+      "keywords": ["renner", "riachuelo", "c&a", "cea ", "zara", "calcados", "calçados", "modas", "netshoes"]
     },
     {
       "key": "compras_online",
@@ -65,7 +65,7 @@
       "key": "lazer",
       "label": "Lazer/Entretenimento",
       "priority": 10,
-      "keywords": ["cinema", "ingresso", "steam", "playstation", "xbox", "show", "teatro", "parque", "viagem", "hotel", "airbnb", "bar ", "balada"]
+      "keywords": ["cinema", "ingresso", "steam", "playstation", "xbox", "show", "teatro", "parque", "viagem", "hotel", "airbnb", "bar ", "balada", "wellhub"]
     },
     {
       "key": "outros",

@@ -14,11 +14,12 @@ def test_full_pipeline_matches_hand_computed_totals():
 
     metrics = summary_metrics(df, rules, n_invoices=1)
 
-    # Gastos (exclui pagamento/estorno): 350 + 45.90 + 200 + 58.30 + 23.50 + 39.90 + 60 + 99.99
-    assert round(metrics["total_gasto"], 2) == 877.59
+    # Gastos (exclui só o pagamento; o estorno entra e anula a compra cancelada):
+    # 350 + 45.90 + 200 + 58.30 + 23.50 + 39.90 + 60 + 99.99 - 58.30
+    assert round(metrics["total_gasto"], 2) == 819.29
     # Essenciais: mercado (350) + farmacia (45.90) + posto (200)
     assert round(metrics["total_essencial"], 2) == 595.90
-    assert metrics["n_transacoes"] == 8
+    assert metrics["n_transacoes"] == 9
 
     totals = totals_by_category(df, rules)
     priorities = list(totals["priority"])
