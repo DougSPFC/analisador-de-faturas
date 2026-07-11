@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from aggregator import combine_invoices, invoice_to_dataframe, summary_metrics, totals_by_category
-from categorizer import categorize_dataframe, category_labels, load_categories
+from categorizer import categorize_dataframe, category_labels, load_categories, normalize_text
 from export import to_csv_bytes, to_excel_bytes
 from pdf_parser import parse_pdf
 
@@ -119,6 +119,39 @@ col2.metric("Essenciais (mercado + farmácia + posto)", f"R$ {metrics['total_ess
 col3.metric("Transações", metrics["n_transacoes"])
 col4.metric("Faturas incluídas", metrics["n_faturas"])
 
+detail_column_config = {
+    "date": st.column_config.DateColumn("Data", format="DD/MM/YYYY"),
+    "description": st.column_config.TextColumn("Descrição", width="large"),
+    "amount": st.column_config.NumberColumn("Valor (R$)", format="R$ %.2f"),
+    "category": st.column_config.TextColumn("Categoria"),
+    "fatura": st.column_config.TextColumn("Fatura"),
+}
+
+st.divider()
+st.subheader("Buscar uma compra específica")
+search_term = st.text_input(
+    "Buscar por descrição (ex: nome do estabelecimento) — soma só as transações encontradas",
+    key="search_term",
+)
+if search_term.strip():
+    normalized_search = normalize_text(search_term)
+    matches = combined_df[
+        combined_df["description"].apply(normalize_text).str.contains(normalized_search, na=False)
+    ].sort_values("amount", ascending=False)
+    if matches.empty:
+        st.write(f'Nenhuma transação encontrada para "{search_term}".')
+    else:
+        st.metric(f'Total para "{search_term}"', f"R$ {matches['amount'].sum():,.2f}")
+        st.caption(f"{len(matches)} transação(ões) encontrada(s), em qualquer categoria ou fatura")
+        st.dataframe(
+            matches[["date", "description", "amount", "category", "fatura"]],
+            hide_index=True,
+            use_container_width=True,
+            column_config=detail_column_config,
+        )
+
+st.divider()
+
 totals = totals_by_category(combined_df, rules)
 spend_totals = totals[~totals["excluded_from_spend_total"]].reset_index(drop=True)
 other_totals = totals[totals["excluded_from_spend_total"]].reset_index(drop=True)
@@ -148,13 +181,6 @@ if not spend_totals.empty:
         height=90 + 40 * len(spend_totals),
     )
     st.plotly_chart(fig, use_container_width=True)
-
-    detail_column_config = {
-        "date": st.column_config.DateColumn("Data", format="DD/MM/YYYY"),
-        "description": st.column_config.TextColumn("Descrição", width="large"),
-        "amount": st.column_config.NumberColumn("Valor (R$)", format="R$ %.2f"),
-        "fatura": st.column_config.TextColumn("Fatura"),
-    }
 
     st.caption("Clique numa categoria para ver as transações que compõem o total")
     for _, row in spend_totals.iterrows():
