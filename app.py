@@ -32,6 +32,7 @@ def _theme_colors() -> dict:
 st.set_page_config(page_title="Analisador de Faturas", layout="wide")
 st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 st.session_state.setdefault("invoices", {})
+st.session_state.setdefault("removed_hashes", set())
 
 rules = load_categories()
 category_options = category_labels(rules)
@@ -64,6 +65,8 @@ if uploaded_files:
     for uploaded in uploaded_files:
         file_bytes = uploaded.getvalue()
         file_hash = hashlib.md5(file_bytes).hexdigest()
+        if file_hash in st.session_state.removed_hashes:
+            continue
         if file_hash not in st.session_state.invoices:
             invoice = parse_pdf(file_bytes, filename=uploaded.name)
             df = invoice_to_dataframe(invoice)
@@ -120,6 +123,7 @@ for file_hash, info in list(st.session_state.invoices.items()):
 
         if st.button("Remover fatura", key=f"remove_{file_hash}"):
             del st.session_state.invoices[file_hash]
+            st.session_state.removed_hashes.add(file_hash)
             st.rerun()
 
 st.divider()

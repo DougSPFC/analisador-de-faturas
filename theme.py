@@ -100,8 +100,12 @@ def stat_card(label: str, value: str, accent: str, help_text: str = "") -> str:
     """Card de resumo estilo dashboard financeiro: fundo escuro fixo, faixa e
     rótulo na cor de destaque, valor grande em negrito. Fundo fixo (não
     depende do tema claro/escuro da página) para não ficar ilegível se o
-    usuário trocar o tema do Streamlit."""
-    subtitle = f'<div style="color:#8b90a3; font-size:0.78rem; margin-top:6px;">{help_text}</div>' if help_text else ""
+    usuário trocar o tema do Streamlit.
+
+    A legenda (help_text) sempre reserva a mesma altura, tenha texto ou não —
+    assim os cards de uma mesma linha ficam com a mesma altura e alinhamento
+    mesmo quando só um deles usa legenda (ex: "Essenciais").
+    """
     return f"""
     <div style="
         background: #141826;
@@ -110,9 +114,14 @@ def stat_card(label: str, value: str, accent: str, help_text: str = "") -> str:
         border-radius: 14px;
         padding: 18px 20px;
         height: 100%;
+        min-height: 118px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-sizing: border-box;
     ">
-        <div style="color:{accent}; font-size:0.75rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; margin-bottom:10px;">{label}</div>
+        <div style="color:{accent}; font-size:0.75rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase;">{label}</div>
         <div style="color:#F2F3F7; font-size:1.9rem; font-weight:800; line-height:1.1;">{value}</div>
-        {subtitle}
+        <div style="color:#8b90a3; font-size:0.78rem; min-height:1.1em;">{help_text}</div>
     </div>
     """
